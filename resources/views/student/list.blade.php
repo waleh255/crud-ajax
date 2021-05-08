@@ -85,7 +85,7 @@
         <h4 class="modal-title">Update Student</h4>
       </div>
 	  <div class="modal-body">
-		<form id="updateStudent" name="updateStudent" action="{{ route('student.update') }}" method="post">
+		<form id="updateStudent" name="updateStudent" data-url="{{ route('student.update') }}" method="post">
 			<input type="hidden" name="hdnStudentId" id="hdnStudentId"/>
 			@csrf
 			<div class="form-group">
@@ -149,11 +149,53 @@
   }
 	});
 
-});
-</script>
-<script>
-    //When click edit student
-//     $('body').on('click', '.btnEdit', function () {
+	$('body').on('click', '.btnEdit', function () {
+      var student_id = $(this).attr('data-id');
+      $.get('student/' + student_id +'/edit', function (data) {
+          $('#updateModal').modal('show');
+          $('#updateStudent #hdnStudentId').val(data.id);
+          $('#updateStudent #txtFirstName').val(data.first_name);
+          $('#updateStudent #txtLastName').val(data.last_name);
+          $('#updateStudent #txtAddress').val(data.address);
+      })
+   });
+    // Update the student
+	$("#updateStudent").validate({
+		 rules: {
+				txtFirstName: "required",
+				txtLastName: "required",
+				txtAddress: "required"
+
+			},
+			messages: {
+			},
+
+		 submitHandler: function(form) {
+			var url = $("#updateStudent").attr("data-url");
+		  $.ajax({
+			  data: {'updateStudent': updateStudent},
+			  url: url,
+			  type: "POST",
+			  dataType: 'json',
+			  
+			  success: function (data) {
+			//	  console.log(data);
+				  var student = '<td>' + data.id + '</td>';
+				  student += '<td>' + data.first_name + '</td>';
+				  student += '<td>' + data.last_name + '</td>';
+				  student += '<td>' + data.address + '</td>';
+				  student += '<td><a data-id="' + data.id + '" class="btn btn-primary btnEdit">Edit</a>&nbsp;&nbsp;<a data-id="' + data.id + '" class="btn btn-danger btnDelete">Delete</a></td>';
+				  $('#studentTable tbody #'+ data.id).html(student);
+				  $('#updateStudent')[0].reset();
+				  $('#updateModal').modal('hide');
+			  },
+			  error: function (data) {
+			  }
+		  });
+		}
+	});
+
+// 	$('body').on('click', '.btnEdit', function () {
 //       var student_id = $(this).attr('data-id');
 //       $.get('student/' + student_id +'/edit', function (data) {
 //           $('#updateModal').modal('show');
@@ -197,13 +239,31 @@
 // 		}
 // 	});
 
+
+
+
 //    //delete student
-// 	$('body').on('click', '.btnDelete', function () {
-//       var student_id = $(this).attr('data-id');
-//       $.get('student/' + student_id +'/delete', function (data) {
-//           $('#studentTable tbody #'+ student_id).remove();
-//       })
-//    });
+	$('body').on('click', '.btnDelete', function () {
+      var student_id = $(this).attr('data-id');
+      $.get('student/' + student_id +'/delete', function (data) {
+          $('#studentTable tbody #'+ student_id).remove();
+      })
+   });
+
+
+
+
+
+
+
+
+});
+</script>
+<script>
+
+ 
+
+
 
 
 </script> 
