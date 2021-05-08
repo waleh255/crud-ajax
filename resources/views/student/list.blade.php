@@ -51,7 +51,7 @@
         <h4 class="modal-title">Add New Student</h4>
       </div>
 	  <div class="modal-body">
-		<form id="addStudent" name="addStudent" action="{{ route('student.store') }}" method="POST" data-url="{{ route('student.store') }}">
+		<form id="addStudent" name="addStudent"  method="POST" data-url="{{ route('student.store') }}">
 			@csrf
 			<div class="form-group">
 				<label for="txtFirstName">First Name:</label>
@@ -110,72 +110,9 @@
   </div>
 </div>
 
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-  <script style="text/javascript">
-  $(document).ready(function (){
-      $("#addStuden").on('click',function()
-      {
-      var a= document.getElementById('txtFirstName').value;
-      var ab= document.getElementById('txtLastName').value;
-      var ac= document.getElementById('txtAddress').value;
-      var url = $('#addStudent').attr('data-url') ;
-      console.log(a,ab,ac);
-
-    $.ajaxSetup({
-        headers:{            'X-CSRF-TOKEN' :$('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $.ajax({
-        type:"POST",
-        url:url,
-        data:{
-            "txtFirstNam":a,
-            'txtLastName':ab,
-            'txtAddress':ac
-        },
-        success:function(response){
-            // $('#container').append('');
-            response.forEach(data => {
-                $('#studentTable').append('<tr id="'+data.id+'">';
-				  student += '<td>' + data.id + '</td>';
-				  student += '<td>' + data.first_name + '</td>';
-				  student += '<td>' + data.last_name + '</td>';
-				  student += '<td>' + data.address + '</td>';
-				  student += '<td><a data-id="' + data.id + '" class="btn btn-primary btnEdit">Edit</a>&nbsp;&nbsp;<a data-id="' + data.id + '" class="btn btn-danger btnDelete">Delete</a></td>';
-				  student += '</tr>';);
-            });
-        }
-    });
-
-
-
-  })
-  });
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- 
 <script>
   $(document).ready(function () {
-	//Add the Student
+	
 	$("#addStudent").validate({
 		 rules: {
 				txtFirstName: "required",
@@ -185,18 +122,15 @@
 			messages: {
 			},
 
-
-
 		 submitHandler: function(form) {
 		$("#addStudent").attr("action");
+		var url = $("#addStudent").attr("data-url");
 		  $.ajax({
 			  data: $('#addStudent').serialize(),
-			  url: form_action,
+			  url: url,
 			  type: "POST",
 			  dataType: 'json',
-
-
-            
+           
 			  success: function (data) {
 				  var student = '<tr id="'+data.id+'">';
 				  student += '<td>' + data.id + '</td>';
@@ -209,68 +143,70 @@
 				  $('#addStudent')[0].reset();
 				  $('#addModal').modal('hide');
 			  },
-			  error: function (data) {
-			  }
+			//   error: function (data) {
+			//   }
 		  });
-		}
+  }
 	});
-
-
-    //When click edit student
-    $('body').on('click', '.btnEdit', function () {
-      var student_id = $(this).attr('data-id');
-      $.get('student/' + student_id +'/edit', function (data) {
-          $('#updateModal').modal('show');
-          $('#updateStudent #hdnStudentId').val(data.id);
-          $('#updateStudent #txtFirstName').val(data.first_name);
-          $('#updateStudent #txtLastName').val(data.last_name);
-          $('#updateStudent #txtAddress').val(data.address);
-      })
-   });
-    // Update the student
-	$("#updateStudent").validate({
-		 rules: {
-				txtFirstName: "required",
-				txtLastName: "required",
-				txtAddress: "required"
-
-			},
-			messages: {
-			},
-
-		 submitHandler: function(form) {
-		  var form_action = $("#updateStudent").attr("action");
-		  $.ajax({
-			  data: {'updateStudent': updateStudent},
-			  url: form_action,
-			  type: "POST",
-			  dataType: 'json',
-			  success: function (data) {
-				  var student = '<td>' + data.id + '</td>';
-				  student += '<td>' + data.first_name + '</td>';
-				  student += '<td>' + data.last_name + '</td>';
-				  student += '<td>' + data.address + '</td>';
-				  student += '<td><a data-id="' + data.id + '" class="btn btn-primary btnEdit">Edit</a>&nbsp;&nbsp;<a data-id="' + data.id + '" class="btn btn-danger btnDelete">Delete</a></td>';
-				  $('#studentTable tbody #'+ data.id).html(student);
-				  $('#updateStudent')[0].reset();
-				  $('#updateModal').modal('hide');
-			  },
-			  error: function (data) {
-			  }
-		  });
-		}
-	});
-
-   //delete student
-	$('body').on('click', '.btnDelete', function () {
-      var student_id = $(this).attr('data-id');
-      $.get('student/' + student_id +'/delete', function (data) {
-          $('#studentTable tbody #'+ student_id).remove();
-      })
-   });
 
 });
-</script> --}}
+</script>
+<script>
+    //When click edit student
+//     $('body').on('click', '.btnEdit', function () {
+//       var student_id = $(this).attr('data-id');
+//       $.get('student/' + student_id +'/edit', function (data) {
+//           $('#updateModal').modal('show');
+//           $('#updateStudent #hdnStudentId').val(data.id);
+//           $('#updateStudent #txtFirstName').val(data.first_name);
+//           $('#updateStudent #txtLastName').val(data.last_name);
+//           $('#updateStudent #txtAddress').val(data.address);
+//       })
+//    });
+//     // Update the student
+// 	$("#updateStudent").validate({
+// 		 rules: {
+// 				txtFirstName: "required",
+// 				txtLastName: "required",
+// 				txtAddress: "required"
+
+// 			},
+// 			messages: {
+// 			},
+
+// 		 submitHandler: function(form) {
+// 		  var form_action = $("#updateStudent").attr("action");
+// 		  $.ajax({
+// 			  data: {'updateStudent': updateStudent},
+// 			  url: form_action,
+// 			  type: "POST",
+// 			  dataType: 'json',
+// 			  success: function (data) {
+// 				  var student = '<td>' + data.id + '</td>';
+// 				  student += '<td>' + data.first_name + '</td>';
+// 				  student += '<td>' + data.last_name + '</td>';
+// 				  student += '<td>' + data.address + '</td>';
+// 				  student += '<td><a data-id="' + data.id + '" class="btn btn-primary btnEdit">Edit</a>&nbsp;&nbsp;<a data-id="' + data.id + '" class="btn btn-danger btnDelete">Delete</a></td>';
+// 				  $('#studentTable tbody #'+ data.id).html(student);
+// 				  $('#updateStudent')[0].reset();
+// 				  $('#updateModal').modal('hide');
+// 			  },
+// 			  error: function (data) {
+// 			  }
+// 		  });
+// 		}
+// 	});
+
+//    //delete student
+// 	$('body').on('click', '.btnDelete', function () {
+//       var student_id = $(this).attr('data-id');
+//       $.get('student/' + student_id +'/delete', function (data) {
+//           $('#studentTable tbody #'+ student_id).remove();
+//       })
+//    });
+
+
+</script> 
 
 
 
@@ -305,3 +241,4 @@
 
 
 @endsection
+
