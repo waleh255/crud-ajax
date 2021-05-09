@@ -78,9 +78,9 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        // $where = array('id' => $id);
+        $where = array('id' => $id);
         $student = Student::find($id);
-        // $student  = Student::where($where)->first();
+        $student  = Student::where($where)->first();
 
         // return response()->json($student);
         return Response::json($student);
